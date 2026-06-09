@@ -2,7 +2,7 @@ import asyncio, logging, sys
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from sqlalchemy import text
 
 from app.config import settings
@@ -25,13 +25,15 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="PhotoSync", description="NAS 相机储存卡自动同步系统", version="1.0.0", lifespan=lifespan)
 
+# Mount static files
 try: app.mount("/static", StaticFiles(directory="/app/static"), name="static")
 except: pass
 
 @app.get("/")
 async def root():
-    return HTMLResponse('<html><head><meta http-equiv="refresh" content="0;url=/static/index.html"></head><body><p>PhotoSync - <a href="/static/index.html">打开管理界面</a></p></body></html>')
+    return RedirectResponse(url="/static/index.html")
 
+# API Routes
 @app.get("/api/v1/system/health")
 async def health():
     try:
@@ -57,3 +59,15 @@ app.include_router(gallery.router)
 app.include_router(settings.router)
 app.include_router(notifications.router)
 app.include_router(system.router)
+
+# SPA catch-all: must be last, after all API routes
+@app.get("/{full_path:path}")
+async def spa_fallback(full_path: str):
+    # Skip API routes (shouldn't reach here, but safety check)
+    if full_path.startswith("api/"):
+        from fastapi.responses import JSONResponse
+        return JSONResponse(status_code=404, content={"error": "not found"})
+    try:
+        return HTMLResponse(content=open("/app/static/index.html", encoding="utf-8").read())
+    except:
+        return RedirectResponse(url="/static/index.html")
