@@ -19,6 +19,6 @@ import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import ThemeToggle from './components/ThemeToggle.vue'
 const router = useRouter()
-const nav = [{path:'/',label:'仪表盘'},{path:'/profiles',label:'同步配置'},{path:'/history',label:'同步记录'},{path:'/gallery',label:'照片画廊'},{path:'/settings',label:'系统设置'}]
+const nav = [{path:'/',label:'仪表盘'},{path:'/cards',label:'储存卡'},{path:'/profiles',label:'同步配置'},{path:'/history',label:'同步记录'},{path:'/gallery',label:'照片画廊'},{path:'/settings',label:'系统设置'}]
 const isSetup = computed(() => router.currentRoute.value.path === '/setup')
 </script>
