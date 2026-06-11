@@ -20,7 +20,9 @@
           </div>
           <div>
             <label class="label">默认目标目录</label>
-            <input v-model="defaultDest" class="input" />
+            <input v-model="defaultDest" class="input font-mono text-sm" placeholder="例如：/volume2/照片/相机备份" />
+            <p class="text-xs text-gray-500 mt-1">请输入 NAS 上的完整文件夹路径，例如 <code class="font-mono bg-gray-100 dark:bg-gray-700 px-1 rounded">/volume2/照片</code></p>
+            <p class="text-xs text-orange-500 mt-1">⚠ 请直接粘贴 NAS 文件管理器中复制的完整路径</p>
           </div>
           <div class="grid grid-cols-2 gap-4">
             <div>

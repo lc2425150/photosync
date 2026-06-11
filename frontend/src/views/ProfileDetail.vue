@@ -4,8 +4,9 @@
 
     <!-- Path mapping hint -->
     <div v-if="mapping" class="text-xs text-gray-500 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 mb-4">
-      <p><strong>提示：</strong>目标目录填写 NAS 上的实际路径即可。</p>
-      <p class="mt-1">例如：<code class="font-mono bg-blue-100 dark:bg-blue-800 px-1 rounded">{{ mapping.host_base }}/相机备份</code></p>
+      <p><strong>📁 提示：</strong>请直接填入 NAS 上的完整文件夹路径。</p>
+      <p class="mt-1">从 NAS 文件管理器复制完整路径粘贴到这里，例如：<code class="font-mono bg-blue-100 dark:bg-blue-800 px-1 rounded">{{ mapping.host_base }}/相机备份</code></p>
+      <p class="mt-1 text-orange-500">⚠ 不要填容器内路径（如 /photos/xxx），填 NAS 实际路径即可</p>
     </div>
 
     <div class="card space-y-4">
@@ -44,7 +45,7 @@
       <div>
         <label class="label">目标目录（NAS 路径）</label>
         <input v-model="form.destination" class="input font-mono text-sm" :placeholder="mapping ? mapping.host_base + '/相机名' : '/volume2/照片/相机名'" />
-        <p class="text-xs text-gray-500 mt-1">填写 NAS 上的完整文件夹路径</p>
+        <p class="text-xs text-orange-500 mt-1">⚠ 请粘贴 NAS 文件管理器中复制的完整路径</p>
       </div>
 
       <div class="grid grid-cols-2 gap-4">
