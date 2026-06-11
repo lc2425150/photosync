@@ -1,5 +1,5 @@
 """
-PhotoSync — system endpoints: storage, logs.
+PhotoSync — system endpoints: storage, logs, path mapping.
 """
 
 from __future__ import annotations
@@ -14,8 +14,22 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from app.models import SyncLog
 from app.schemas import StorageItem, LogEntry, PaginatedResponse
+from app.config import settings as app_settings
 
 router = APIRouter(prefix="/api/v1/system", tags=["system"])
+
+
+@router.get("/path-mapping")
+async def path_mapping():
+    """Return the host ↔ container path mapping for the photos mount."""
+    return {
+        "host_base": app_settings.photos_mount_host_path,
+        "container_base": "/photos",
+        "description": (
+            f"把 NAS 路径 {app_settings.photos_mount_host_path}/xxx "
+            f"映射到容器内的 /photos/xxx。设置目标目录时填入 NAS 路径即可。"
+        ),
+    }
 
 
 @router.get("/storage", response_model=list[StorageItem])
