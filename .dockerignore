@@ -1,0 +1,30 @@
+# Git
+.git/
+.gitignore
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+.pytest_cache/
+
+# Node (runtime only, build deps installed by Docker)
+frontend/node_modules/
+
+# Docker data
+data/
+dev_data/
+dev_photos/
+mock_usb/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Docs
+docs/
+README.md
+LICENSE
