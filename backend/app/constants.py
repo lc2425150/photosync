@@ -59,7 +59,7 @@ DEFAULT_HISTORY_RETENTION_DAYS: int = 365
 
 DEFAULT_POLL_INTERVAL: int = 5
 DEFAULT_MAX_CONCURRENT_COPIES: int = 4
-DEFAULT_SCAN_PATHS: list[str] = ["/media", "/mnt", "/run/media"]
+DEFAULT_SCAN_PATHS: list[str] = ["/media", "/mnt", "/mnt/@usb", "/run/media"]
 DEFAULT_DESTINATION: str = "/photos"
 DEFAULT_MAX_QUEUE_SIZE: int = 10000
 

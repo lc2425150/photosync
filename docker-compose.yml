@@ -1,28 +1,37 @@
 services:
   photosync:
-    # ── 方式一：从 GitHub Container Registry 拉取（需先发布）──
-    # image: ghcr.io/lc2425150/photosync:latest
-
-    # ── 方式二：本地构建（推荐首次使用）──
     build: .
-
     image: photosync:latest
     container_name: photosync
     ports:
       - "8932:8932"
     volumes:
-      # 相机储存卡挂载路径（只读）
-      - /media:/media:ro
-      - /mnt:/mnt:ro
-      - /run/media:/run/media:ro
-      # 照片存储目标路径（NAS 实际照片目录 → 容器内 /photos）
+      # ── 储存卡扫描路径（使用 rslave 传播，让 USB 子挂载透传到容器）──
+      - type: bind
+        source: /media
+        target: /media
+        read_only: true
+        bind:
+          propagation: rslave
+      - type: bind
+        source: /mnt
+        target: /mnt
+        read_only: true
+        bind:
+          propagation: rslave
+      - type: bind
+        source: /run/media
+        target: /run/media
+        read_only: true
+        bind:
+          propagation: rslave
+      # ── 照片存储目录 ──
       - /volume2/照片:/photos:rw
-      # 应用数据持久化（数据库、缩略图等）
+      # ── 应用数据持久化 ──
       - ./data:/app/data
     environment:
       - TZ=Asia/Shanghai
       - POLL_INTERVAL=5
-      # 照片目录在 NAS 上的真实路径（路径映射用）
       - PHOTOS_MOUNT_HOST_PATH=/volume2/照片
     deploy:
       resources:
