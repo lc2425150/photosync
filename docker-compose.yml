@@ -16,6 +16,7 @@ services:
       - PUID=1000
       - PGID=100
       - POLL_INTERVAL=5
+      - PHOTOS_MOUNT_HOST_PATH=/volume2/照片
       - DEBUG=false
     deploy:
       resources:
