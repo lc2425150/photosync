@@ -1,6 +1,8 @@
 import pytest
 from app.services.dedup import DedupService
 
+
+@pytest.mark.asyncio
 class TestDedup:
     async def test_register_new(self, db_session):
         s = DedupService(db_session)

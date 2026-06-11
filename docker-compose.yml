@@ -1,6 +1,7 @@
 services:
   photosync:
     build: .
+    image: photosync:latest
     container_name: photosync
     ports:
       - "8932:8932"
@@ -15,12 +16,13 @@ services:
       - PUID=1000
       - PGID=100
       - POLL_INTERVAL=5
+      - DEBUG=false
     deploy:
       resources:
         limits:
-          cpus: '2'
+          cpus: "2"
           memory: 512M
         reservations:
-          cpus: '0.5'
+          cpus: "0.5"
           memory: 128M
     restart: unless-stopped

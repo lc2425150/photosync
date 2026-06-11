@@ -1,7 +1,23 @@
+"""
+Integration tests for PhotoSync API.
+Overrides the DB URL to use a temp file before importing the app.
+"""
+import os, sys, tempfile
+
+# 1. Override settings BEFORE any app imports
+_db_fd, _db_path = tempfile.mkstemp(suffix=".db", prefix="ps_test_")
+os.close(_db_fd)
+
+import app.config
+app.config.settings.database_url = f"sqlite+aiosqlite:///{_db_path}"
+
+# 2. Now safe to import app (engine uses the overridden URL)
 import pytest
 from httpx import AsyncClient, ASGITransport
+
 from app.main import app
 from app.database import init_db, engine
+
 
 @pytest.fixture
 async def client():
@@ -10,7 +26,13 @@ async def client():
     async with AsyncClient(transport=transport, base_url="http://test") as ac:
         yield ac
     await engine.dispose()
+    try:
+        os.remove(_db_path)
+    except FileNotFoundError:
+        pass
 
+
+@pytest.mark.asyncio
 class TestAPI:
     async def test_health(self, client):
         r = await client.get("/api/v1/system/health")

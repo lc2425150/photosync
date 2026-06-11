@@ -1,6 +1,19 @@
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
-from sqlalchemy.orm import DeclarativeBase
+"""
+PhotoSync — async SQLAlchemy engine and session management.
+"""
+
+from __future__ import annotations
+
+from typing import AsyncGenerator
+
 from sqlalchemy import text
+from sqlalchemy.ext.asyncio import (
+    AsyncSession,
+    async_sessionmaker,
+    create_async_engine,
+)
+from sqlalchemy.orm import DeclarativeBase
+
 from app.config import settings
 
 engine = create_async_engine(
@@ -11,17 +24,21 @@ engine = create_async_engine(
 
 async_session = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
+
 class Base(DeclarativeBase):
     pass
 
-async def get_db():
+
+async def get_db() -> AsyncGenerator[AsyncSession, None]:
     async with async_session() as session:
         try:
             yield session
         finally:
             await session.close()
 
+
 async def init_db():
+    """Create all tables and configure SQLite pragmas."""
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
         await conn.execute(text("PRAGMA journal_mode=WAL"))
