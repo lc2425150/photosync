@@ -7,7 +7,7 @@
       <StatusCard title="系统状态" value="运行中" badge="健康" badgeType="success"/>
     </div>
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
-      <div class="lg:col-span-2"><SyncProgress :running="sync.status" :current="sync.current" :total="sync.total" :speed="sync.speed_mbps" :currentFile="sync.current_file" :eta="fmtETA(sync.eta_seconds)"/></div>
+      <div class="lg:col-span-2"><SyncProgress :running="sync.status" :current="sync.current" :total="sync.total" :speed="sync.speed_mbps" :currentFile="sync.current_file" :eta="fmtETA(sync.eta_seconds)" @cancel="cancelSync"/></div>
       <QueuePanel :queue="syncQueue" @cancel="cancelQ"/>
     </div>
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -59,6 +59,6 @@ useWebSocket(d=>{
   if(d.type==='sync_completed'){sync.value={running:false};load()}
   if(d.type==='queue_updated') syncApi.getQueue().then(r=>syncQueue.value=r).catch(()=>{})
 })
-const cancelQ=async id=>{try{await syncApi.cancelQueue(id);syncQueue.value=await syncApi.getQueue()}catch(e){alert(e.message)}}
+const cancelSync=async()=>{try{await syncApi.cancel();sync.value={running:false};await load()}catch(e){alert(e.message)}};const cancelQ=async id=>{try{await syncApi.cancelQueue(id);syncQueue.value=await syncApi.getQueue()}catch(e){alert(e.message)}}
 const fmtETA=s=>{if(!s)return'';if(s<60)return s+'秒';if(s<3600)return Math.floor(s/60)+'分钟';return Math.floor(s/3600)+'小时'+Math.floor((s%3600)/60)+'分钟'}
 </script>
