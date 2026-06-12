@@ -26,13 +26,13 @@ services:
         bind:
           propagation: rslave
       # ── 照片存储目录 ──
-      - /volume2/照片:/photos:rw
+      - /volume2/Photos:/photos:rw
       # ── 应用数据持久化 ──
       - ./data:/app/data
     environment:
       - TZ=Asia/Shanghai
       - POLL_INTERVAL=5
-      - PHOTOS_MOUNT_HOST_PATH=/volume2/照片
+      - PHOTOS_MOUNT_HOST_PATH=/volume2/Photos
     deploy:
       resources:
         limits:

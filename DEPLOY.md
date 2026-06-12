@@ -16,12 +16,12 @@ services:
       - /media:/media:ro
       - /mnt:/mnt:ro
       - /run/media:/run/media:ro
-      - /volume2/照片:/photos:rw       # ← 改成你的 NAS 照片目录
+      - /volume2/Photos:/photos:rw       # ← 改成你的 NAS 照片目录
       - ./data:/app/data
     environment:
       - TZ=Asia/Shanghai
       - POLL_INTERVAL=5
-      - PHOTOS_MOUNT_HOST_PATH=/volume2/照片  # ← 改成你的 NAS 路径
+      - PHOTOS_MOUNT_HOST_PATH=/volume2/Photos  # ← 改成你的 NAS 路径
     restart: unless-stopped
 ```
 
@@ -58,11 +58,11 @@ docker run -d \
   -v /media:/media:ro \
   -v /mnt:/mnt:ro \
   -v /run/media:/run/media:ro \
-  -v /volume2/照片:/photos:rw \
+  -v /volume2/Photos:/photos:rw \
   -v ./data:/app/data \
   -e TZ=Asia/Shanghai \
   -e POLL_INTERVAL=5 \
-  -e PHOTOS_MOUNT_HOST_PATH=/volume2/照片 \
+  -e PHOTOS_MOUNT_HOST_PATH=/volume2/Photos \
   photosync:latest
 ```
 
@@ -84,11 +84,11 @@ docker run -d --name photosync \
   -v /media:/media:ro \
   -v /mnt:/mnt:ro \
   -v /run/media:/run/media:ro \
-  -v /volume2/照片:/photos:rw \
+  -v /volume2/Photos:/photos:rw \
   -v ./data:/app/data \
   -e TZ=Asia/Shanghai \
   -e POLL_INTERVAL=5 \
-  -e PHOTOS_MOUNT_HOST_PATH=/volume2/照片 \
+  -e PHOTOS_MOUNT_HOST_PATH=/volume2/Photos \
   ghcr.io/lc2425150/photosync:latest
 ```
 
@@ -100,13 +100,13 @@ docker run -d --name photosync \
 |---------|--------|------|
 | `TZ` | `Asia/Shanghai` | 时区 |
 | `POLL_INTERVAL` | `5` | 储存卡轮询间隔（秒） |
-| `PHOTOS_MOUNT_HOST_PATH` | `/volume2/照片` | NAS 上的照片目录真实路径 |
+| `PHOTOS_MOUNT_HOST_PATH` | `/volume2/Photos` | NAS 上的照片目录真实路径 |
 | `DEBUG` | `false` | 调试模式 |
 
 | 卷挂载 | 说明 |
 |--------|------|
 | `/media:/media:ro` | 储存卡挂载路径（只读） |
-| `/volume2/照片:/photos:rw` | 照片存储目标路径 |
+| `/volume2/Photos:/photos:rw` | 照片存储目标路径 |
 | `./data:/app/data` | 数据库和缩略图持久化 |
 
 ---

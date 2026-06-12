@@ -18,7 +18,7 @@ set -euo pipefail
 IMAGE_NAME="photosync"
 IMAGE_TAG="latest"
 PORT="${PORT:-8932}"
-PHOTOS_MOUNT="${PHOTOS_MOUNT:-/volume2/照片}"
+PHOTOS_MOUNT="${PHOTOS_MOUNT:-/volume2/Photos}"
 DATA_DIR="${DATA_DIR:-./data}"
 REMOTE_USER=""
 REMOTE_HOST=""

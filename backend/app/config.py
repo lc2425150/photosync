@@ -40,7 +40,7 @@ class Settings(BaseSettings):
     history_retention_days: int = c.DEFAULT_HISTORY_RETENTION_DAYS
 
     # ── Path mapping ──
-    photos_mount_host_path: str = "/volume2/照片"
+    photos_mount_host_path: str = "/volume2/Photos"
 
     # ── Misc ──
     tz: str = "Asia/Shanghai"
