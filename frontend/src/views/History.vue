@@ -16,5 +16,5 @@
 const items=ref([]);const page=ref(1);const total=ref(0);const totalPages=computed(()=>Math.ceil(total.value/50))
 const load=async()=>{try{const d=await historyApi.list({page:page.value,page_size:50});items.value=d.items;total.value=d.total}catch(e){}};onMounted(load)
 
-const removeHistory=async(id,name)=>{if(!confirm(\`确定删除「\${name||'未知'}」的同步记录？\`))return;try{await historyApi.delete(id);await load()}catch(e){alert('删除失败: '+e.message)}}
+const removeHistory=async(id,name)=>{if(!confirm(`确定删除${name||'未知'}的同步记录？`))return;try{await historyApi.delete(id);await load()}catch(e){alert('删除失败: '+e.message)}}
 </script>
