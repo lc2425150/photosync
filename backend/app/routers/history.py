@@ -64,6 +64,19 @@ async def get_history_files(
     return PaginatedResponse(items=items, total=total, page=page, page_size=page_size)
 
 
+@router.delete("/{hid:int}")
+async def delete_history(hid: int, db: AsyncSession = Depends(get_db)):
+    h = await db.get(SyncHistory, hid)
+    if not h:
+        from app.exceptions import NotFoundError, as_http_exception
+        raise as_http_exception(NotFoundError(code="HISTORY_NOT_FOUND", message="同步记录不存在"))
+    # Delete associated files first
+    await db.execute(delete(SyncFile).where(SyncFile.history_id == hid))
+    await db.delete(h)
+    await db.commit()
+    return {"ok": True}
+
+
 @router.delete("")
 async def clean_history(days: int = Query(90, ge=1), db: AsyncSession = Depends(get_db)):
     from sqlalchemy.sql import func as f2
