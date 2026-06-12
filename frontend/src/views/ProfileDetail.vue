@@ -72,6 +72,9 @@
           <input type="checkbox" v-model="form.auto_sync" class="rounded" />自动同步
         </label>
         <label class="flex items-center gap-2">
+          <input type="checkbox" v-model="form.sync_videos" class="rounded" />同步视频
+        </label>
+        <label class="flex items-center gap-2">
           <input type="checkbox" v-model="form.checksum_verify" class="rounded" />校验完整性
         </label>
       </div>
@@ -106,6 +109,7 @@ const form = ref({
   conflict_strategy: 'skip',
   copy_mode: 'copy',
   auto_sync: false,
+  sync_videos: true,
   checksum_verify: true,
 })
 
@@ -122,7 +126,10 @@ onMounted(async () => {
   if (!isNew.value) {
     try {
       const d = await profilesApi.get(route.params.id)
-      form.value = { ...d }
+      // Map file_filters to sync_videos for the toggle
+      const ff = d.file_filters || {}
+      form.value = { ...d, sync_videos: ff.videos !== false }
+      delete form.value.file_filters
     } catch (e) {
       alert(e.message)
     }
@@ -131,10 +138,17 @@ onMounted(async () => {
 
 const save = async () => {
   try {
+    const payload = { ...form.value }
+    // Set file_filters based on sync_videos toggle
+    payload.file_filters = {
+      photos: true,
+      videos: payload.sync_videos ?? true,
+    }
+    delete payload.sync_videos
     if (isNew.value) {
-      await profilesApi.create(form.value)
+      await profilesApi.create(payload)
     } else {
-      await profilesApi.update(route.params.id, form.value)
+      await profilesApi.update(route.params.id, payload)
     }
     router.push('/profiles')
   } catch (e) {
