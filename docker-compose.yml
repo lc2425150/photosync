@@ -6,7 +6,8 @@ services:
     ports:
       - "8932:8932"
     volumes:
-      # ── 储存卡扫描路径（使用 rslave 传播，让 USB 子挂载透传到容器）──
+      # ── 储存卡扫描路径 ──
+      # 使用 rslave 传播让 USB 子挂载点透传到容器内
       - type: bind
         source: /media
         target: /media
@@ -25,13 +26,14 @@ services:
         read_only: true
         bind:
           propagation: rslave
-      # ── 照片存储目录 ──
+      # ── 照片存储目录（改成你 NAS 上实际的照片路径） ──
       - /volume2/Photos:/photos:rw
       # ── 应用数据持久化 ──
       - ./data:/app/data
     environment:
       - TZ=Asia/Shanghai
       - POLL_INTERVAL=5
+      # 照片目录在 NAS 上的真实路径（路径映射用）
       - PHOTOS_MOUNT_HOST_PATH=/volume2/Photos
     deploy:
       resources:
