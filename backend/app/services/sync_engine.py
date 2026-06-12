@@ -279,6 +279,8 @@ class SyncEngine:
                         else SyncStatus.COMPLETED
                     )
                     h.synced_files = sc
+                    h.total_files = total
+                    h.total_bytes = total_bytes
                     h.skipped_files = sk
                     h.failed_files = fc
                     h.synced_bytes = sbytes
